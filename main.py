@@ -47,7 +47,11 @@ class Main:
 if __name__ == "__main__":
   main = Main()
 <<<<<<< HEAD
+<<<<<<< HEAD
   main.run()
 =======
   main.run()
 >>>>>>> c4af593 (Update)
+=======
+  main.run()
+>>>>>>> 2de3bfc2e3103c16247ff5439925f43aa4e3e03e
