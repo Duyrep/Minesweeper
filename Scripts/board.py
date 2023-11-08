@@ -6,7 +6,7 @@ class Board:
   def __init__(self, size : tuple, cellSize : int):
     self.size = size
     self.cellSize = cellSize
-    self.numMines = 10
+    self.numMines = 99
     self.openCellList = []
     self.cellFlagged = []
     self.cellGameOver = ()
