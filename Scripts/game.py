@@ -14,10 +14,10 @@ class Game:
     self.board = board
     self.mousePos = pg.mouse.get_pos()
     self.displaySize = display.get_size()
-    self.imageBar = self.load_image_bar()
     self.imageCell = self.load_image_cell()
     self.imageFace = self.load_image_face()
     self.imageNumber = self.load_image_number()
+    self.imageBorder = self.load_image_border()
     self.click = True
     self.faceStatus = "SmileyFace"
     self.mousePressed = False
@@ -31,36 +31,36 @@ class Game:
     self.mousePosPressed = []
   
   def load_image_cell(self):
-    imageCell = {}
+    image = {}
     for file in os.listdir("Assets"):
       if file.endswith(".png"):
         if "Cell" in file:
-          imageCell[file[:-4]] = pg.image.load(f"Assets/{file}")
-    return imageCell
-
-  def load_image_bar(self):
-    imageBar = {}
-    for file in os.listdir("Assets"):
-      if file.endswith(".png"):
-        if "Bar" or "Game" in file:
-          imageBar[file[:-4]] = pg.image.load(f"Assets/{file}")
-    return imageBar
+          image[file[:-4]] = pg.image.load(f"Assets/{file}")
+    return image
 
   def load_image_face(self):
-    imageBar = {}
+    image = {}
     for file in os.listdir("Assets"):
       if file.endswith(".png"):
         if "Face" in file:
-          imageBar[file[:-4]] = pg.image.load(f"Assets/{file}")
-    return imageBar
+          image[file[:-4]] = pg.image.load(f"Assets/{file}")
+    return image
 
   def load_image_number(self):
-    imageBar = {}
+    image = {}
     for file in os.listdir("Assets"):
       if file.endswith(".png"):
         if "Number" in file:
-          imageBar[file[:-4]] = pg.image.load(f"Assets/{file}")
-    return imageBar
+          image[file[:-4]] = pg.image.load(f"Assets/{file}")
+    return image
+  
+  def load_image_border(self):
+    image = {}
+    for file in os.listdir("Assets"):
+      if file.endswith(".png"):
+        if "Border" in file:
+          image[file[:-4]] = pg.image.load(f"Assets/{file}")
+    return image
 
   def handl(self, event : typing.List[pg.event.Event]):
     if \
@@ -208,7 +208,7 @@ class Game:
         else:
           cell_type = "HiddenCell"
         surface.blit(pg.transform.scale(self.imageCell[cell_type], surfaceCellSize), pos)
-    self.display.blit(surface, (12, self.displaySize[1] - 12 - self.board.cellSize * self.board.size[1]))
+    self.display.blit(surface, (20, self.displaySize[1] - 20 - self.board.cellSize * self.board.size[1]))
 
   
   def draw_face(self):
@@ -229,12 +229,28 @@ class Game:
       timer = "999"
     for i in range(3):
       timerSurface.blit(pg.transform.scale(self.imageNumber[f"Number{timer[i]}"], (20, 40)), (i*20, 0))
-    self.display.blit(timerSurface, (self.displaySize[0] - 88, 28))
+    self.display.blit(timerSurface, (self.displaySize[0] - 90, 30))
+  
+  def draw_border(self):
+    w = (self.displaySize[0], 20)
+    h = (20, self.displaySize[1])
+    self.display.blit(pg.transform.scale(self.imageBorder["BorderHeight"], h), (0, 20))
+    self.display.blit(pg.transform.scale(self.imageBorder["BorderHeight"], h), (self.displaySize[0] - 20, 20))
+    self.display.blit(pg.transform.scale(self.imageBorder["BorderWidth"], w), (20, 0))
+    self.display.blit(pg.transform.scale(self.imageBorder["BorderWidth"], w), (20, self.displaySize[1] - 20))
+    self.display.blit(pg.transform.scale(self.imageBorder["BorderWidth"], w), (20, 75))
+    self.display.blit(self.imageBorder["Upper-leftCornerBorder"], (0, 0))
+    self.display.blit(self.imageBorder["Upper-rightCornerBorder"], (self.displaySize[0] - 20, 0))
+    self.display.blit(self.imageBorder["BottomLeftCornerBorder"], (0, self.displaySize[1] - 20))
+    self.display.blit(self.imageBorder["BottomRightCornerBorder"], (self.displaySize[0] - 20, self.displaySize[1] - 20))
+    self.display.blit(pg.transform.scale(self.imageBorder["LeftBarCornerBorder"], (20, 20)), (0, 75))
+    self.display.blit(pg.transform.scale(self.imageBorder["RightBarCornerBorder"], (20, 20)), (self.displaySize[0] - 20, 75))
 
   def draw(self):
     self.draw_grid()
     self.draw_face()
     self.draw_number()
+    self.draw_border()
 
   def update(self):
     if not self.click and not self.gameover:

@@ -9,10 +9,10 @@ class Main:
   def __init__(self) -> None:
     pg.init()
     cellSize = 30
-    gridSize = (30, 16)
+    gridSize = (9, 9)
     self.display = pg.display.set_mode((
-      cellSize * gridSize[0] + 12 * 2,
-      cellSize * gridSize[1] + 96 + 12
+      cellSize * gridSize[0] + 20 * 2,
+      cellSize * gridSize[1] + 115
     ))
     self.clock = pg.time.Clock()
     self.board = Board(gridSize, cellSize)
@@ -46,12 +46,4 @@ class Main:
 
 if __name__ == "__main__":
   main = Main()
-<<<<<<< HEAD
-<<<<<<< HEAD
   main.run()
-=======
-  main.run()
->>>>>>> c4af593 (Update)
-=======
-  main.run()
->>>>>>> 2de3bfc2e3103c16247ff5439925f43aa4e3e03e
