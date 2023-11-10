@@ -9,7 +9,7 @@ class Main:
   def __init__(self) -> None:
     pg.init()
     cellSize = 30
-    gridSize = (9, 9)
+    gridSize = (30, 16)
     self.display = pg.display.set_mode((
       cellSize * gridSize[0] + 20 * 2,
       cellSize * gridSize[1] + 115

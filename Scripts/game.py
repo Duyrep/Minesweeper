@@ -20,7 +20,6 @@ class Game:
     self.imageBorder = self.load_image_border()
     self.click = True
     self.faceStatus = "SmileyFace"
-    self.mousePressed = False
     self.gameover = False
     self.win = False
     self.rectcol = False
@@ -63,15 +62,18 @@ class Game:
     return image
 
   def handl(self, event : typing.List[pg.event.Event]):
+    mousePressed = pg.mouse.get_pressed()
     if \
-      0 < (self.mousePos[0] - 12) / self.board.cellSize < self.board.size[0] and \
-      0 < (self.mousePos[1] - 96) / self.board.cellSize < self.board.size[1]:
+      0 < (self.mousePos[0] - 20) / self.board.cellSize < self.board.size[0] and \
+      0 < (self.mousePos[1] - 95) / self.board.cellSize < self.board.size[1]:
       mousePosOnGrid = (
-        int((self.mousePos[0] - 12) / self.board.cellSize),
-        int((self.mousePos[1] - 96) / self.board.cellSize)
+        int((self.mousePos[0] - 20) / self.board.cellSize),
+        int((self.mousePos[1] - 95) / self.board.cellSize)
       )
-      if self.mousePressed:
+      if mousePressed[0]:
         self.mousePosPressed = mousePosOnGrid
+      else:
+        self.mousePosPressed = ()
       if event.type == pg.MOUSEBUTTONDOWN:
         if event.button == 1:
           self.mouseDownPosOnGrid = mousePosOnGrid
@@ -80,11 +82,8 @@ class Game:
             self.faceStatus = "SadFace"
           if self.gameover and self.win:
             self.faceStatus = "CoolFace"
-          self.mousePressed = True
       elif event.type == pg.MOUSEBUTTONUP:
         if event.button == 1:
-          self.mousePosPressed = []
-          self.mousePressed = False
           if mousePosOnGrid == self.mouseDownPosOnGrid and not self.gameover:
             if mousePosOnGrid not in self.board.openCellList and mousePosOnGrid not in self.board.cellFlagged:
               if self.board.grid[mousePosOnGrid[0]][mousePosOnGrid[1]] != -1:
@@ -130,8 +129,6 @@ class Game:
           self.faceStatus = "SmileyFace"
           threading.Thread(target=self.board.reset).start()
           threading.Thread(target=self.board.random_mines).start()
-    elif self.mousePressed:
-      self.mousePressed = False
 
     rect1 = pg.Rect(self.displaySize[0] / 2 - 20, 28, 40, 40)
     if event.type == pg.MOUSEBUTTONDOWN:
@@ -187,6 +184,7 @@ class Game:
       self.board.flag_all_cells()
 
   def draw_grid(self):
+    mousePressed = pg.mouse.get_pressed()
     surface = pg.Surface((self.board.cellSize * self.board.size[0], self.board.cellSize * self.board.size[1]))
     surface.fill((192, 192, 192))
     surfaceCellSize = [self.board.cellSize] * 2
@@ -203,7 +201,7 @@ class Game:
           cell_type = "MisflaggedMineCell"
         elif cell in self.board.cellFlagged:
           cell_type = "FlaggedCell"
-        elif cell == self.mousePosPressed and self.mousePressed and not self.gameover:
+        elif cell == self.mousePosPressed and mousePressed[0] and not self.gameover:
           cell_type = "EmptyCell"
         else:
           cell_type = "HiddenCell"
